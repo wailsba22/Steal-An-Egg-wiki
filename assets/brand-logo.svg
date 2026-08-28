@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Nest Watch</title>
+  <desc id="desc">A golden egg in a green nest</desc>
+  <path d="M18 61c6 17 20 25 30 25s24-8 30-25c-12 7-48 7-60 0Z" fill="#5f3b22" stroke="#f7b23b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M48 10C35 22 29 36 31 51c2 15 10 23 17 23s15-8 17-23c2-15-4-29-17-41Z" fill="#fff7dc" stroke="#f7b23b" stroke-width="4"/>
+  <path d="M42 27c4-5 8-8 12-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+  <path d="M25 70c8 8 18 12 23 12m23-12c-8 8-18 12-23 12" fill="none" stroke="#3e7654" stroke-width="4" stroke-linecap="round"/>
+</svg>

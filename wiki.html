@@ -1,0 +1,670 @@
+<script src="nav.js" defer></script>
+<script src="nav.js" defer></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nest Watch — The Steal An Egg Wiki</title>
+<meta name="description" content="A static community wiki for Steal an Egg with biome, pet, mutation, and earnings references.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3DE;
+    --shell: #F2E4BD;
+    --nest: #6B4A2F;
+    --nest-dark: #3E2A1B;
+    --yolk: #F4A93B;
+    --yolk-deep: #E07C24;
+    --grass: #4C7A56;
+    --sky: #6FB6C9;
+    --ink: #2B2118;
+    --speckle: #B98A54;
+
+    /* rarity tier colors, common -> divine */
+    --t-common:#9BB89F;
+    --t-uncommon:#6FAE86;
+    --t-rare:#6FB6C9;
+    --t-epic:#8B8FD9;
+    --t-legendary:#B48CD9;
+    --t-mythic:#D97ABF;
+    --t-cosmic:#E0637A;
+    --t-secret:#F4A93B;
+    --t-eternal:#E85D4A;
+    --t-divine:#F2D24B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    display:flex;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    width: 258px; flex-shrink:0;
+    background: var(--nest-dark); color: var(--shell);
+    position: sticky; top:0; height:100vh; overflow-y:auto;
+    padding: 26px 20px 40px;
+  }
+  .side-brand{ display:flex; align-items:center; gap:10px; margin-bottom: 30px; }
+  .brand-mark{
+    width:26px; height:32px;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--shell) 60%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    border: 2px solid var(--nest-dark);
+    flex-shrink:0;
+  }
+  .side-brand-name{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:1.05rem; line-height:1.1;}
+  .side-brand-sub{ font-size:0.62rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.55; }
+
+  .side-search{
+    width:100%; background: rgba(251,243,222,0.07); border:1px solid rgba(251,243,222,0.15);
+    color: var(--shell); border-radius:10px; padding:9px 12px; font-size:0.82rem;
+    font-family:'Inter', sans-serif; margin-bottom: 24px;
+  }
+  .side-search::placeholder{ color: rgba(251,243,222,0.4); }
+
+  .side-group{ margin-bottom: 22px; }
+  .side-group-label{
+    font-family:'JetBrains Mono', monospace; font-size:0.66rem; text-transform:uppercase;
+    letter-spacing:0.1em; opacity:0.45; margin-bottom: 8px; padding: 0 8px;
+  }
+  .side-link{
+    display:flex; align-items:center; gap:9px;
+    padding: 8px 10px; border-radius:8px; font-size:0.86rem; font-weight:600;
+    text-decoration:none; color: rgba(251,243,222,0.75);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .side-link:hover{ background: rgba(251,243,222,0.08); color: var(--shell); }
+  .side-link.active{ background: rgba(244,169,59,0.16); color: var(--yolk); }
+  .side-link .ic{ font-size:1rem; }
+
+  .side-status{
+    margin-top: 6px;
+    background: rgba(244,169,59,0.1); border:1px solid rgba(244,169,59,0.25);
+    border-radius:10px; padding:12px 12px;
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem; color: var(--yolk);
+    display:flex; align-items:center; gap:8px;
+  }
+  .side-status .dot{ width:6px; height:6px; border-radius:50%; background: var(--yolk); animation: pulse-dot 1.6s ease-in-out infinite; flex-shrink:0;}
+  @keyframes pulse-dot{ 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:0.4; transform:scale(0.7);} }
+
+  /* ---------- MAIN ---------- */
+  main{ flex:1; min-width:0; }
+  .wrap{ max-width: 1080px; margin:0 auto; padding: 48px 40px 100px; }
+
+  .page-tag{
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase;
+    color: var(--grass); font-weight:600; margin-bottom:10px;
+  }
+  h1.page-title{ font-family:'Baloo 2', sans-serif; font-weight:800; font-size: clamp(2rem, 3.4vw, 2.7rem); color: var(--nest-dark); line-height:1.05;}
+  .page-lede{ margin-top:14px; font-size:1.02rem; line-height:1.6; opacity:0.78; max-width:64ch; }
+
+  .stat-strip{ display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:30px; }
+  .stat-box{ background:#fff; border:2px solid var(--nest-dark); border-radius:14px; padding:16px 18px; box-shadow: 4px 4px 0 rgba(62,42,27,0.1);}
+  .stat-box .num{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:1.5rem; color: var(--yolk-deep); }
+  .stat-box .lbl{ font-size:0.74rem; opacity:0.65; margin-top:2px; }
+
+  section.block{ padding-top: 64px; scroll-margin-top: 24px; }
+  section.block:first-of-type{ padding-top: 40px; }
+  .block-head{ margin-bottom: 26px; }
+  .block-head .k{ font-family:'JetBrains Mono', monospace; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color: var(--grass); font-weight:600;}
+  .block-head h2{ font-family:'Baloo 2', sans-serif; font-size:1.7rem; margin-top:6px; color:var(--nest-dark); }
+  .block-head p{ margin-top:8px; opacity:0.72; line-height:1.6; max-width: 66ch; font-size:0.95rem;}
+
+  /* biome cards */
+  .biome-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; }
+  .biome-card{
+    background:#fff; border:2px solid var(--nest-dark); border-radius:16px; padding:20px 22px;
+    box-shadow: 5px 5px 0 rgba(62,42,27,0.1);
+  }
+  .biome-card-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
+  .biome-name{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:1.15rem; color:var(--nest-dark); }
+  .biome-order{ font-family:'JetBrains Mono', monospace; font-size:0.7rem; opacity:0.4; }
+  .biome-meta{ display:flex; gap:16px; margin-top:10px; flex-wrap:wrap; }
+  .biome-meta-item{ font-size:0.8rem; }
+  .biome-meta-item b{ display:block; font-family:'JetBrains Mono', monospace; font-size:0.92rem; color: var(--yolk-deep); }
+  .biome-meta-item span{ opacity:0.6; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.04em;}
+  .biome-desc{ margin-top:12px; font-size:0.85rem; opacity:0.72; line-height:1.55; }
+
+  /* rarity legend */
+  .rarity-legend{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 22px; }
+  .rarity-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em;
+    padding: 5px 10px; border-radius: 20px; border:1.5px solid var(--nest-dark); background:#fff;
+    cursor:pointer; user-select:none; opacity:0.55; transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+  .rarity-chip:hover{ opacity:0.85; }
+  .rarity-chip.active{ opacity:1; box-shadow: 2px 2px 0 var(--nest-dark); transform: translate(-1px,-1px); }
+  .rarity-chip .sw{ width:9px; height:9px; border-radius:50%; }
+
+  .biome-filter{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 18px; }
+  .biome-filter button{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:0.78rem;
+    padding: 7px 14px; border-radius:20px; border:1.5px solid var(--nest-dark);
+    background:#fff; color:var(--nest-dark); cursor:pointer; opacity:0.55;
+  }
+  .biome-filter button.active{ opacity:1; background: var(--nest-dark); color: var(--shell); }
+
+  /* pets table */
+  .pet-table-wrap{ border:2px solid var(--nest-dark); border-radius:16px; overflow:hidden; }
+  table.pets{ width:100%; border-collapse:collapse; background:#fff; }
+  table.pets thead th{
+    text-align:left; font-family:'JetBrains Mono', monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.05em;
+    background: var(--nest-dark); color: var(--shell); padding: 12px 16px;
+  }
+  table.pets tbody td{ padding: 11px 16px; font-size:0.87rem; border-top: 1px solid rgba(62,42,27,0.1); }
+  table.pets tbody tr:hover{ background: rgba(244,169,59,0.06); }
+  .pet-name{ font-weight:700; color: var(--nest-dark); }
+  .rarity-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem; text-transform:uppercase;
+    padding:3px 9px; border-radius:20px; background: rgba(62,42,27,0.06);
+  }
+  .rarity-pill .sw{ width:8px; height:8px; border-radius:50%; }
+  .income{ font-family:'JetBrains Mono', monospace; font-weight:600; color: var(--yolk-deep); }
+  .biome-tag{ font-size:0.78rem; opacity:0.6; }
+  .empty-row td{ text-align:center; padding: 28px; opacity:0.5; font-size:0.85rem; }
+
+  /* rarity tier reference table */
+  .tier-table{ margin-top:18px; border-radius:16px; overflow:hidden; border:2px solid var(--nest-dark); }
+  .tier-row{ display:grid; grid-template-columns: 1.3fr 0.7fr 1.2fr 1.6fr; align-items:center; padding: 12px 18px; background:#fff; border-top:1px solid rgba(62,42,27,0.1);}
+  .tier-row:first-child{ border-top:none; background: var(--nest-dark); color:var(--shell); font-family:'JetBrains Mono', monospace; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.05em;}
+  .tier-name{ display:flex; align-items:center; gap:9px; font-weight:700; font-size:0.88rem; }
+  .tier-sw{ width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  .tier-count, .tier-range{ font-family:'JetBrains Mono', monospace; font-size:0.8rem; opacity:0.75; }
+
+  /* mutation cards */
+  .mut-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:14px; }
+  .mut-card{ background:#fff; border:2px solid var(--nest-dark); border-radius:14px; padding:16px; text-align:center; box-shadow: 4px 4px 0 rgba(62,42,27,0.1); }
+  .mut-swatch{ width:38px; height:38px; border-radius:50%; margin: 0 auto 10px; border:2px solid var(--nest-dark); }
+  .mut-name{ font-family:'Baloo 2', sans-serif; font-weight:700; font-size:1rem; color:var(--nest-dark);}
+  .mut-mult{ font-family:'JetBrains Mono', monospace; font-size:0.85rem; color: var(--yolk-deep); margin-top:4px; font-weight:600;}
+  .mut-src{ font-size:0.72rem; opacity:0.6; margin-top:8px; line-height:1.4;}
+
+  .steps{ counter-reset: step; margin-top:20px; }
+  .step{ display:flex; gap:14px; padding: 14px 0; border-top:1px dashed rgba(62,42,27,0.15); }
+  .step:first-child{ border-top:none; }
+  .step-num{
+    counter-increment: step; flex-shrink:0; width:30px; height:30px; border-radius:50%;
+    background: var(--nest-dark); color: var(--shell); display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2', sans-serif; font-weight:700; font-size:0.85rem;
+  }
+  .step-num::before{ content: counter(step); }
+  .step-body b{ display:block; font-size:0.92rem; color:var(--nest-dark); margin-bottom:2px;}
+  .step-body span{ font-size:0.85rem; opacity:0.72; line-height:1.5; }
+
+  /* predictor (from before, adapted) */
+  .predictor{ background: var(--nest-dark); color: var(--shell); border-radius: 22px; padding: 34px 32px; position:relative; overflow:hidden;}
+  .predictor::after{ content:""; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background: radial-gradient(circle, rgba(244,169,59,0.25), transparent 70%);}
+  .predictor-head{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; position:relative; z-index:1;}
+  .predictor h3{ font-family:'Baloo 2', sans-serif; font-size:1.3rem; font-weight:700; }
+  .status-pill{ display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size:0.7rem; background: rgba(244,169,59,0.15); border:1px solid rgba(244,169,59,0.4); color: var(--yolk); padding:6px 14px; border-radius:20px;}
+  .status-pill .dot{ width:7px; height:7px; border-radius:50%; background: var(--yolk); animation: pulse-dot 1.6s ease-in-out infinite;}
+  .gather-panel{ margin-top:22px; position:relative; z-index:1; background: rgba(251,243,222,0.04); border: 1px solid rgba(251,243,222,0.14); border-radius:16px; padding: 24px 22px;}
+  .gather-row{ display:flex; align-items:center; gap:16px; }
+  .spinner{ width:34px; height:34px; border-radius:50%; border: 3px solid rgba(251,243,222,0.15); border-top-color: var(--yolk); animation: spin 0.9s linear infinite; flex-shrink:0;}
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .gather-copy .g-title{ font-weight:700; font-size:1rem; }
+  .gather-copy .g-sub{ font-size:0.82rem; opacity:0.65; margin-top:2px; }
+  .progress-track{ margin-top:18px; height:9px; border-radius:20px; background: rgba(251,243,222,0.1); overflow:hidden;}
+  .progress-fill{ height:100%; width: 14%; background: linear-gradient(90deg, var(--yolk-deep), var(--yolk)); border-radius:20px; animation: creep 6s ease-in-out infinite;}
+  @keyframes creep{ 0%{ width:10%; } 50%{ width:22%; } 100%{ width:10%; } }
+  .progress-meta{ display:flex; justify-content:space-between; margin-top:9px; font-family:'JetBrains Mono', monospace; font-size:0.7rem; opacity:0.6;}
+  .log{ margin-top:20px; font-family:'JetBrains Mono', monospace; font-size:0.76rem; color: rgba(251,243,222,0.55); line-height:1.85; border-top: 1px dashed rgba(251,243,222,0.15); padding-top:14px;}
+  .log span{ color: var(--yolk); }
+  .source-note{ margin-top:18px; font-size:0.78rem; opacity:0.55; position:relative; z-index:1; }
+  .source-note a{ color: var(--yolk); text-decoration:none; border-bottom: 1px dashed rgba(244,169,59,0.5); }
+
+  footer{ margin-top:70px; padding-top:24px; border-top:1px solid rgba(62,42,27,0.15); color: var(--nest); opacity:0.6; font-size:0.8rem; line-height:1.6;}
+
+  @media (max-width: 900px){
+    .sidebar{ display:none; }
+    .wrap{ padding: 32px 20px 80px; }
+    .stat-strip{ grid-template-columns: repeat(2,1fr); }
+    .biome-grid{ grid-template-columns: 1fr; }
+    .mut-grid{ grid-template-columns: repeat(2,1fr); }
+    .tier-row{ grid-template-columns: 1.1fr 0.6fr 1fr; font-size:0.8rem; }
+    .tier-row div:nth-child(4){ display:none; }
+    table.pets{ font-size:0.8rem; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; } }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="side-brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="side-brand-name">Nest Watch</div>
+      <div class="side-brand-sub">unofficial wiki</div>
+    </div>
+  </div>
+
+  <input class="side-search" id="sideSearch" placeholder="Search pets, biomes…" />
+
+  <div class="side-group">
+    <div class="side-group-label">Wiki</div>
+    <a class="side-link" href="steal-an-egg-wiki.html"><span class="ic">🏠</span> Overview</a>
+    <a class="side-link" href="biomes.html"><span class="ic">🗺️</span> Biomes</a>
+    <a class="side-link" href="pets.html"><span class="ic">🐣</span> Pets & Rarity</a>
+    <a class="side-link" href="calculators.html"><span class="ic">💰</span> Earnings tools</a>
+    <a class="side-link" href="#mutations"><span class="ic">✨</span> Mutations</a>
+  </div>
+
+  <div class="side-group">
+    <div class="side-group-label">Tools</div>
+    <a class="side-link" href="egg-calculator.html"><span class="ic">🥚</span> Egg value calculator</a>
+  </div>
+
+  <div class="side-status"><span class="dot"></span> PREDICTOR: GATHERING DATA</div>
+</aside>
+
+<main>
+<div class="wrap">
+
+  <section class="block" id="overview">
+    <div class="page-tag">unofficial fan wiki · last compiled august 27, 2026</div>
+    <h1 class="page-title">The Steal An Egg Wiki</h1>
+    <p class="page-lede">Everything currently known about Steal An Egg — biomes, guardians, the full pet index, rarity tiers, and the mutation system — pulled together in one static reference. Numbers below are compiled from community guides, not an official API, so treat exact figures as approximate and expect them to shift as the game updates.</p>
+
+    <div class="stat-strip">
+      <div class="stat-box"><div class="num">10</div><div class="lbl">Biomes</div></div>
+      <div class="stat-box"><div class="num">86</div><div class="lbl">Pets in the index</div></div>
+      <div class="stat-box"><div class="num">10</div><div class="lbl">Rarity tiers</div></div>
+      <div class="stat-box"><div class="num">5</div><div class="lbl">Mutations</div></div>
+    </div>
+  </section>
+
+  <section class="block" id="biomes">
+    <div class="block-head">
+      <div class="k">Map</div>
+      <h2>Biomes, guardians & speed gates</h2>
+      <p>Biomes sit along a single route from your base outward. Each one is guarded by a creature that wakes up the moment you grab an egg from its nest — get caught in its home biome and the egg resets to the nest; get caught closer to base and it's still recoverable.</p>
+    </div>
+
+    <div class="biome-grid" id="biomeGrid"></div>
+  </section>
+
+  <section class="block" id="pets">
+    <div class="block-head">
+      <div class="k">Index</div>
+      <h2>Pets & rarity</h2>
+      <p>Ranked across ten tiers, from Common up to Divine. Income scales steeply near the top — the jump from Cosmic to Secret alone outweighs nearly everything below it combined.</p>
+    </div>
+
+    <div class="tier-table" id="tierTable"></div>
+  </section>
+
+  <section class="block" id="pet-index">
+    <div class="block-head">
+      <div class="k">Full list</div>
+      <h2>Complete pet index</h2>
+      <p>Filter by biome or click a rarity chip to isolate a tier. Income is the base $/second before any mutation multiplier.</p>
+    </div>
+
+    <div class="rarity-legend" id="rarityLegend"></div>
+    <div class="biome-filter" id="biomeFilterRow"></div>
+
+    <div class="pet-table-wrap">
+      <table class="pets">
+        <thead>
+          <tr><th>Pet</th><th>Biome</th><th>Rarity</th><th>Income</th></tr>
+        </thead>
+        <tbody id="petTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block" id="mutations">
+    <div class="block-head">
+      <div class="k">Modifiers</div>
+      <h2>Mutations</h2>
+      <p>A pet's size sets its base income; a mutation then multiplies that number. Silver, Golden, and Rainbow can appear naturally on hatch or during Admin Abuse events. Bloom and Spirit Bloom only come from the Sakura Incubator, unlocked with a Crane from the Cherry Blossom biome.</p>
+    </div>
+
+    <div class="mut-grid" id="mutGrid"></div>
+
+    <div class="steps" id="mutSteps"></div>
+  </section>
+
+  <section class="block" id="predictor">
+    <div class="block-head">
+      <div class="k">Live tool</div>
+      <h2>Next Egg Predictor</h2>
+      <p>A forecast for what's likely to come out of the next nest — once there's enough logged data to trust. Right now, here's exactly where it stands.</p>
+    </div>
+
+    <div class="predictor">
+      <div class="predictor-head">
+        <h3>Prediction engine</h3>
+        <div class="status-pill"><span class="dot"></span> STILL GATHERING DATA</div>
+      </div>
+
+      <div class="gather-panel">
+        <div class="gather-row">
+          <div class="spinner"></div>
+          <div class="gather-copy">
+            <div class="g-title">No prediction yet — and that's on purpose.</div>
+            <div class="g-sub">We'd rather show nothing than guess with thin data. The wiki's pet index above is static and pulled from public guides; the predictor below needs its own live sample of steals and hatches before it can say anything.</div>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-meta"><span>SAMPLE SIZE: BUILDING</span><span>CONFIDENCE: —</span></div>
+        <div class="log">
+          <div>&gt; watching nest respawns across biomes<span>...</span></div>
+          <div>&gt; logging hatch outcomes by egg type<span>...</span></div>
+          <div>&gt; next milestone: first confidence estimate</div>
+        </div>
+      </div>
+
+      <div class="source-note">Reference data on this page compiled from public Steal An Egg guides (Eldorado.gg, GAMES.GG, TechWiser, and others) as of Aug 27, 2026 — not pulled live. Treat exact numbers as approximate.</div>
+    </div>
+  </section>
+
+  <footer>
+    Nest Watch is an unofficial fan project and isn't affiliated with Roblox or the developers of Steal An Egg. All figures are community-compiled and may drift from the live game after updates.
+  </footer>
+
+</div>
+</main>
+
+<script>
+// ---------- DATA ----------
+const RARITY_ORDER = ["Common","Uncommon","Rare","Epic","Legendary","Mythic","Cosmic","Secret","Eternal","Divine"];
+const RARITY_COLOR = {
+  Common:"var(--t-common)", Uncommon:"var(--t-uncommon)", Rare:"var(--t-rare)", Epic:"var(--t-epic)",
+  Legendary:"var(--t-legendary)", Mythic:"var(--t-mythic)", Cosmic:"var(--t-cosmic)", Secret:"var(--t-secret)",
+  Eternal:"var(--t-eternal)", Divine:"var(--t-divine)"
+};
+const RARITY_RANGE = {
+  Common:"$1 – $6/s", Uncommon:"$8 – $18/s", Rare:"$35 – $280/s", Epic:"$180 – $4K/s",
+  Legendary:"$1.8K – $74K/s", Mythic:"$16K – $450K/s", Cosmic:"$220K – $12M/s",
+  Secret:"$3.5M – $145M/s", Eternal:"$65M – $600M/s", Divine:"$1B – $1.8B/s"
+};
+const RARITY_COUNT = {Common:5,Uncommon:3,Rare:11,Epic:12,Legendary:12,Mythic:12,Cosmic:11,Secret:10,Eternal:8,Divine:2};
+
+const BIOMES = [
+  {name:"Forest", speed:"Start", guardian:"Chicken", desc:"No speed requirement — the starting area. Chicken is the easiest guardian to shake off."},
+  {name:"Lake", speed:"900", guardian:"Swan", desc:"First biome with a real speed gate. Swan is still fairly slow and forgiving."},
+  {name:"Desert", speed:"10K", guardian:"Scorpion", desc:"Little room to slow down or change direction — the shortest route back matters most here."},
+  {name:"Jungle", speed:"40K", guardian:"Tiger", desc:"Tiger closes distance fast, especially once a heavier egg is already slowing you down."},
+  {name:"Snow", speed:"170K", guardian:"Yeti", desc:"Yeti is big and easy to track, but harder to dodge in tight spaces."},
+  {name:"Volcano", speed:"700K", guardian:"Hellhound", desc:"Noticeably faster guardian — less room to recover from a bad turn with heavier eggs."},
+  {name:"Abyss Ocean", speed:"2.5M", guardian:"Moby", desc:"First guardian once requirements reach into the millions. Small speed losses become obvious."},
+  {name:"Prehistoric", speed:"18M", guardian:"T-Rex", desc:"Last stop before Cosmic. Getting caught here means a long run back."},
+  {name:"Cosmic", speed:"700M", guardian:"Dragon", desc:"The single biggest jump on the map — nearly 39x the Prehistoric requirement."},
+  {name:"Cherry Blossom", speed:"2.5B", guardian:"Nine-tailed fox", desc:"Furthest biome on the map. Getting caught can send you all the way back to Abyss Ocean. Home to the Sakura Incubator."}
+];
+
+const PETS = [
+  // Forest
+  {name:"Chicken", biome:"Forest", rarity:"Common", income:"$1/s"},
+  {name:"Dog", biome:"Forest", rarity:"Common", income:"$2/s"},
+  {name:"Bird", biome:"Forest", rarity:"Uncommon", income:"$8/s"},
+  {name:"Owl", biome:"Forest", rarity:"Rare", income:"$35/s"},
+  {name:"Raccoon", biome:"Forest", rarity:"Rare", income:"$45/s"},
+  {name:"Bear", biome:"Forest", rarity:"Epic", income:"$240/s"},
+  {name:"Fox", biome:"Forest", rarity:"Epic", income:"$180/s"},
+  {name:"Brr Brr Patapim", biome:"Forest", rarity:"Legendary", income:"$1.8K/s"},
+  // Lake
+  {name:"Frog", biome:"Lake", rarity:"Common", income:"$3/s"},
+  {name:"Duckling", biome:"Lake", rarity:"Common", income:"$4/s"},
+  {name:"Catfish", biome:"Lake", rarity:"Uncommon", income:"$12/s"},
+  {name:"Turtle", biome:"Lake", rarity:"Rare", income:"$60/s"},
+  {name:"Trulimero Trulicina", biome:"Lake", rarity:"Epic", income:"$260/s"},
+  {name:"Swan", biome:"Lake", rarity:"Epic", income:"$320/s"},
+  {name:"Axolotl", biome:"Lake", rarity:"Legendary", income:"$2.8K/s"},
+  {name:"Leviathan", biome:"Lake", rarity:"Cosmic", income:"$220K/s"},
+  // Desert
+  {name:"Jerboa", biome:"Desert", rarity:"Common", income:"$6/s"},
+  {name:"Fennec", biome:"Desert", rarity:"Uncommon", income:"$18/s"},
+  {name:"Camel", biome:"Desert", rarity:"Rare", income:"$75/s"},
+  {name:"Tob Tobi Tob Tob", biome:"Desert", rarity:"Epic", income:"$325/s"},
+  {name:"Snake", biome:"Desert", rarity:"Legendary", income:"$3.6K/s"},
+  {name:"Scorpion", biome:"Desert", rarity:"Mythic", income:"$18.5K/s"},
+  {name:"Sand Spider", biome:"Desert", rarity:"Mythic", income:"$16K/s"},
+  {name:"Royal Sphinx", biome:"Desert", rarity:"Cosmic", income:"$280K/s"},
+  // Jungle
+  {name:"Toucan", biome:"Jungle", rarity:"Rare", income:"$110/s"},
+  {name:"Chimpanzee", biome:"Jungle", rarity:"Rare", income:"$90/s"},
+  {name:"Crocodile", biome:"Jungle", rarity:"Epic", income:"$420/s"},
+  {name:"Gorilla", biome:"Jungle", rarity:"Legendary", income:"$4.8K/s"},
+  {name:"Orangutini Ananassini", biome:"Jungle", rarity:"Legendary", income:"$5.5K/s"},
+  {name:"Spider", biome:"Jungle", rarity:"Mythic", income:"$22K/s"},
+  {name:"Tiger", biome:"Jungle", rarity:"Mythic", income:"$28K/s"},
+  {name:"King Snake", biome:"Jungle", rarity:"Secret", income:"$3.5M/s"},
+  // Snow
+  {name:"Penguin", biome:"Snow", rarity:"Rare", income:"$140/s"},
+  {name:"Walrus", biome:"Snow", rarity:"Epic", income:"$600/s"},
+  {name:"Polar Bear", biome:"Snow", rarity:"Legendary", income:"$7K/s"},
+  {name:"Sabertooth Tiger", biome:"Snow", rarity:"Mythic", income:"$35K/s"},
+  {name:"Mammoth", biome:"Snow", rarity:"Mythic", income:"$42K/s"},
+  {name:"King Mammoth", biome:"Snow", rarity:"Cosmic", income:"$400K/s"},
+  {name:"Yeti", biome:"Snow", rarity:"Secret", income:"$5M/s"},
+  {name:"Ice Dragon", biome:"Snow", rarity:"Eternal", income:"$65M/s"},
+  // Volcano
+  {name:"Lava Gecko", biome:"Volcano", rarity:"Rare", income:"$180/s"},
+  {name:"Lava Frog", biome:"Volcano", rarity:"Epic", income:"$850/s"},
+  {name:"Flaming Bull", biome:"Volcano", rarity:"Legendary", income:"$9.5K/s"},
+  {name:"Lava Iguana", biome:"Volcano", rarity:"Legendary", income:"$11K/s"},
+  {name:"Chillin Chilli", biome:"Volcano", rarity:"Mythic", income:"$55K/s"},
+  {name:"Cerberus", biome:"Volcano", rarity:"Secret", income:"$8M/s"},
+  {name:"Phoenix", biome:"Volcano", rarity:"Eternal", income:"$85M/s"},
+  {name:"Lava Dragon", biome:"Volcano", rarity:"Eternal", income:"$100M/s"},
+  // Abyss Ocean
+  {name:"Parrotfish", biome:"Abyss Ocean", rarity:"Rare", income:"$220/s"},
+  {name:"Swordfish", biome:"Abyss Ocean", rarity:"Epic", income:"$1.1K/s"},
+  {name:"Shark", biome:"Abyss Ocean", rarity:"Legendary", income:"$15K/s"},
+  {name:"Orca", biome:"Abyss Ocean", rarity:"Mythic", income:"$80K/s"},
+  {name:"Whale Shark", biome:"Abyss Ocean", rarity:"Cosmic", income:"$700K/s"},
+  {name:"Beluga Whale", biome:"Abyss Ocean", rarity:"Cosmic", income:"$850K/s"},
+  {name:"Kraken", biome:"Abyss Ocean", rarity:"Secret", income:"$15M/s"},
+  {name:"El Maja", biome:"Abyss Ocean", rarity:"Eternal", income:"$130M/s"},
+  // Prehistoric
+  {name:"Dodo", biome:"Prehistoric", rarity:"Rare", income:"$280/s"},
+  {name:"Pterodactyl", biome:"Prehistoric", rarity:"Legendary", income:"$22K/s"},
+  {name:"Ankylosaurus", biome:"Prehistoric", rarity:"Mythic", income:"$120K/s"},
+  {name:"Triceratops", biome:"Prehistoric", rarity:"Cosmic", income:"$1.2M/s"},
+  {name:"Bronto", biome:"Prehistoric", rarity:"Cosmic", income:"$1.5M/s"},
+  {name:"Tralaledon", biome:"Prehistoric", rarity:"Secret", income:"$32M/s"},
+  {name:"T-Rex", biome:"Prehistoric", rarity:"Secret", income:"$25M/s"},
+  {name:"Mosasaurus", biome:"Prehistoric", rarity:"Eternal", income:"$180M/s"},
+  // Cosmic
+  {name:"Centapede", biome:"Cosmic", rarity:"Epic", income:"$1.5K/s"},
+  {name:"Cosmic Gecko", biome:"Cosmic", rarity:"Legendary", income:"$30K/s"},
+  {name:"Cosmic Gorilla", biome:"Cosmic", rarity:"Mythic", income:"$180K/s"},
+  {name:"La Vacca Saturno Saturnita", biome:"Cosmic", rarity:"Cosmic", income:"$2.2M/s"},
+  {name:"Cosmic Dragon", biome:"Cosmic", rarity:"Secret", income:"$60M/s"},
+  {name:"Cosmic Skeleton Boss", biome:"Cosmic", rarity:"Secret", income:"$45M/s"},
+  {name:"Eternal Lunar Dragon", biome:"Cosmic", rarity:"Eternal", income:"$250M/s"},
+  {name:"Unicorn", biome:"Cosmic", rarity:"Divine", income:"$1B/s"},
+  // Cherry Blossom
+  {name:"Crane", biome:"Cherry Blossom", rarity:"Epic", income:"$4K/s"},
+  {name:"Salamander", biome:"Cherry Blossom", rarity:"Legendary", income:"$74K/s"},
+  {name:"Red Panda", biome:"Cherry Blossom", rarity:"Mythic", income:"$450K/s"},
+  {name:"Koi", biome:"Cherry Blossom", rarity:"Cosmic", income:"$12M/s"},
+  {name:"Snowy Owl", biome:"Cherry Blossom", rarity:"Cosmic", income:"$7.5M/s"},
+  {name:"Stag", biome:"Cherry Blossom", rarity:"Secret", income:"$145M/s"},
+  {name:"Oni Tiger", biome:"Cherry Blossom", rarity:"Eternal", income:"$600M/s"},
+  {name:"Kitsune", biome:"Cherry Blossom", rarity:"Divine", income:"$1.8B/s"},
+  // Brainrots (Shop, limited)
+  {name:"Tung Tung Sahur", biome:"Shop (Brainrot Egg)", rarity:"Rare", income:"39% hatch chance"},
+  {name:"Bananita Dolphinita", biome:"Shop (Brainrot Egg)", rarity:"Epic", income:"25% hatch chance"},
+  {name:"Belula Beluga", biome:"Shop (Brainrot Egg)", rarity:"Mythic", income:"20% hatch chance"},
+  {name:"Mangolini Parrochini", biome:"Shop (Brainrot Egg)", rarity:"Cosmic", income:"10% hatch chance"},
+  {name:"Bomboclat Crocolat", biome:"Shop (Brainrot Egg)", rarity:"Secret", income:"5% hatch chance"},
+  {name:"Strawberry Elephant", biome:"Shop (Brainrot Egg)", rarity:"Eternal", income:"1% hatch chance"},
+];
+
+const MUTATIONS = [
+  {name:"Silver", mult:"1.25x", how:"Egg spawn, Admin Abuse", color:"#C7CDD6"},
+  {name:"Bloom", mult:"1.5x", how:"Sakura Incubator (97.5%)", color:"#F2A6C8"},
+  {name:"Golden", mult:"2x", how:"Egg spawn or Admin Abuse", color:"#F4C93B"},
+  {name:"Rainbow", mult:"2.5x", how:"Egg spawn or Admin Abuse", color:"#8B8FD9"},
+  {name:"Spirit Bloom", mult:"3x", how:"Sakura Incubator (2.5%)", color:"#F290D0"},
+];
+
+const MUT_STEPS = [
+  {t:"Hatch eggs for regular mutations", d:"Silver, Golden, and Rainbow can appear naturally when a pet hatches. An egg with an unusual hue — golden or rainbow-tinted — is a sign it'll hatch mutated."},
+  {t:"Fuse pets with the same mutation", d:"Three pets sharing a mutation can be fused into one. The result keeps the mutation and has a chance to hatch larger, which raises income independently of the mutation multiplier."},
+  {t:"Participate in Admin Abuse", d:"Special Saturday events that offer extra chances at Silver, Golden, and Rainbow mutated eggs outside normal hatching."},
+  {t:"Unlock the Sakura Incubator", d:"Hatch the Epic Crane from the Cherry Blossom biome and feed it into the Incubator — it's consumed once, unlocking the machine permanently. Any egg placed inside then has a chance at Bloom or Spirit Bloom, stacking with whatever regular mutation it already has."},
+];
+
+// ---------- RENDER ----------
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }
+
+// Biomes
+const biomeGrid = document.getElementById('biomeGrid');
+BIOMES.forEach((b,i)=>{
+  const card = el('div','biome-card');
+  card.innerHTML = `
+    <div class="biome-card-head">
+      <div class="biome-name">${b.name}</div>
+      <div class="biome-order">#${String(i+1).padStart(2,'0')}</div>
+    </div>
+    <div class="biome-meta">
+      <div class="biome-meta-item"><b>${b.speed}</b><span>Min. speed</span></div>
+      <div class="biome-meta-item"><b>${b.guardian}</b><span>Guardian</span></div>
+    </div>
+    <div class="biome-desc">${b.desc}</div>
+  `;
+  biomeGrid.appendChild(card);
+});
+
+// Tier table
+const tierTable = document.getElementById('tierTable');
+tierTable.appendChild(el('div','tier-row', `<div>Rarity</div><div># Pets</div><div>Income range</div><div>Notes</div>`));
+RARITY_ORDER.forEach(r=>{
+  const row = el('div','tier-row');
+  row.innerHTML = `
+    <div class="tier-name"><span class="tier-sw" style="background:${RARITY_COLOR[r]}"></span>${r}</div>
+    <div class="tier-count">${RARITY_COUNT[r]}</div>
+    <div class="tier-range">${RARITY_RANGE[r]}</div>
+    <div style="font-size:0.82rem; opacity:0.6;">${r==="Divine" ? "Top tier — Kitsune & Unicorn only" : r==="Eternal" ? "One per biome's deepest nest" : ""}</div>
+  `;
+  tierTable.appendChild(row);
+});
+
+// Rarity legend (filter chips)
+const rarityLegend = document.getElementById('rarityLegend');
+let activeRarities = new Set();
+RARITY_ORDER.forEach(r=>{
+  const chip = el('div','rarity-chip active', `<span class="sw" style="background:${RARITY_COLOR[r]}"></span>${r}`);
+  chip.dataset.rarity = r;
+  activeRarities.add(r);
+  chip.addEventListener('click', ()=>{
+    if(activeRarities.has(r)){ activeRarities.delete(r); chip.classList.remove('active'); }
+    else{ activeRarities.add(r); chip.classList.add('active'); }
+    renderPets();
+  });
+  rarityLegend.appendChild(chip);
+});
+
+// Biome filter row
+const biomeNames = ["All", ...BIOMES.map(b=>b.name), "Shop (Brainrot Egg)"];
+const biomeFilterRow = document.getElementById('biomeFilterRow');
+let activeBiome = "All";
+biomeNames.forEach(name=>{
+  const btn = document.createElement('button');
+  btn.textContent = name;
+  if(name==="All") btn.classList.add('active');
+  btn.addEventListener('click', ()=>{
+    activeBiome = name;
+    [...biomeFilterRow.children].forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    renderPets();
+  });
+  biomeFilterRow.appendChild(btn);
+});
+
+const petTableBody = document.getElementById('petTableBody');
+let searchTerm = "";
+function renderPets(){
+  petTableBody.innerHTML = "";
+  const filtered = PETS.filter(p=>
+    activeRarities.has(p.rarity) &&
+    (activeBiome==="All" || p.biome===activeBiome) &&
+    p.name.toLowerCase().includes(searchTerm)
+  );
+  if(filtered.length===0){
+    const tr = document.createElement('tr');
+    tr.className = 'empty-row';
+    tr.innerHTML = `<td colspan="4">No pets match these filters.</td>`;
+    petTableBody.appendChild(tr);
+    return;
+  }
+  filtered.forEach(p=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="pet-name">${p.name}</td>
+      <td class="biome-tag">${p.biome}</td>
+      <td><span class="rarity-pill"><span class="sw" style="background:${RARITY_COLOR[p.rarity]}"></span>${p.rarity}</span></td>
+      <td class="income">${p.income}</td>
+    `;
+    petTableBody.appendChild(tr);
+  });
+}
+renderPets();
+
+document.getElementById('sideSearch').addEventListener('input', (e)=>{
+  searchTerm = e.target.value.toLowerCase();
+  renderPets();
+  document.getElementById('pet-index').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+// Mutations
+const mutGrid = document.getElementById('mutGrid');
+MUTATIONS.forEach(m=>{
+  const card = el('div','mut-card');
+  card.innerHTML = `
+    <div class="mut-swatch" style="background:${m.color}"></div>
+    <div class="mut-name">${m.name}</div>
+    <div class="mut-mult">${m.mult}</div>
+    <div class="mut-src">${m.how}</div>
+  `;
+  mutGrid.appendChild(card);
+});
+
+const mutSteps = document.getElementById('mutSteps');
+MUT_STEPS.forEach(s=>{
+  const step = el('div','step');
+  step.innerHTML = `<div class="step-num"></div><div class="step-body"><b>${s.t}</b><span>${s.d}</span></div>`;
+  mutSteps.appendChild(step);
+});
+
+// Sidebar active link on scroll
+const sections = document.querySelectorAll('section.block');
+const links = document.querySelectorAll('.side-link');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const match = document.querySelector(`.side-link[href="#${entry.target.id}"]`);
+      if(match) match.classList.add('active');
+    }
+  });
+}, {rootMargin: "-20% 0px -70% 0px"});
+sections.forEach(s=>io.observe(s));
+</script>
+
+<script>
+const banner = document.createElement('div');
+banner.className = 'hero-banner';
+banner.style.cssText = 'background:linear-gradient(120deg,#3a2417,#79502f 58%,#3e7654);color:#fff9e9;border-radius:20px;padding:32px;margin-bottom:32px;box-shadow:8px 8px 0 rgba(62,42,27,.14)';
+banner.innerHTML = '<div class="page-tag" style="color:#f7b23b">Nest Watch · community field guide</div><h2 style="color:#fff9e9;font-family:Baloo 2,sans-serif;font-size:2rem;margin:8px 0">Steal smarter. Hatch richer.</h2><p>Explore every biome, compare every pet, and plan your next egg run with the static tools below.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><a href="pets.html" style="background:#f7b23b;color:#352116;text-decoration:none;padding:10px 14px;border-radius:7px;font-weight:800">Browse all pets</a><a href="calculators.html" style="color:#fff9e9;padding:10px 14px">Calculate earnings</a><a href="egg-calculator.html" style="color:#fff9e9;padding:10px 14px">Value an egg</a></div>';
+document.querySelector('.wrap').prepend(banner);
+</script>
+
+</body>
+</html>

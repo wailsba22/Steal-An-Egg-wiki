@@ -1,0 +1,21 @@
+{
+  "name": "Nest Watch - Steal an Egg Wiki",
+  "short_name": "Nest Watch",
+  "icons": [
+    {
+      "src": "/assets/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#352116",
+  "background_color": "#fbf3de",
+  "display": "standalone"
+}
